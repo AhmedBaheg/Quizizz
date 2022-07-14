@@ -56,9 +56,12 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="40dp"
+                    android:backgroundTint="@null"
                     android:hint="@string/email_address"
                     app:errorEnabled="true"
                     app:errorTextAppearance="@style/ErrorAppearance"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@color/red"
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/HintAppearance"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -87,6 +90,8 @@
                     android:hint="@string/password"
                     app:errorEnabled="true"
                     app:errorTextAppearance="@style/ErrorAppearance"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@color/red"
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/HintAppearance"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -153,6 +158,19 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:indeterminateTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

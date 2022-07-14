@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@drawable/button"
-                android:drawableEnd="@drawable/ic__close"
+                android:drawableEnd="@drawable/ic_close"
                 android:text="@string/exit_quiz"
                 android:textAllCaps="false"
                 android:textSize="15sp"

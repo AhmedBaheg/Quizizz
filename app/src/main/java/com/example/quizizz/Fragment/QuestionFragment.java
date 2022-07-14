@@ -1,11 +1,13 @@
 package com.example.quizizz.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.quizizz.Dialog.ExitDialog;
 import com.example.quizizz.Model.QuestionModel;
 import com.example.quizizz.R;
 import com.example.quizizz.ViewModel.QuestionViewModel;
@@ -77,6 +80,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         binding.optionB.setOnClickListener(this);
         binding.optionC.setOnClickListener(this);
         binding.nextQuestion.setOnClickListener(this);
+        binding.exitQuiz.setOnClickListener(this);
 
     }
 
@@ -92,11 +96,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         model.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<QuestionModel>>() {
             @Override
             public void onChanged(List<QuestionModel> questionModels) {
-                binding.question.setText("Q"+i+": "+questionModels.get(i - 1).getQuestion());
+                binding.question.setText("Q" + i + ": " + questionModels.get(i - 1).getQuestion());
                 binding.optionA.setText(questionModels.get(i - 1).getOption_a());
                 binding.optionB.setText(questionModels.get(i - 1).getOption_b());
                 binding.optionC.setText(questionModels.get(i - 1).getOption_c());
-                binding.questionCount.setText(String.valueOf("Total Q: " +questionCount));
+                binding.questionCount.setText(String.valueOf("Total Q: " + questionCount));
                 timer = questionModels.get(i - 1).getTimer();
                 answer = questionModels.get(i - 1).getAnswer();
                 startTimer();
@@ -119,7 +123,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                 String decoration = String.format(Locale.ENGLISH, "%02d : %02d", minute, second);
                 binding.timer.setText(decoration);
 
-                if (l < 6000){
+                if (l < 6000) {
                     binding.timer.setTextColor(Color.RED);
                     binding.image.setImageResource(R.drawable.ic_timer_red);
                 }
@@ -163,8 +167,26 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     resetOptions();
                 }
                 break;
+            case R.id.exit_Quiz:
+                dialogCheckExit();
+                break;
 
         }
+    }
+
+    private void dialogCheckExit() {
+
+        ExitDialog dialog = new ExitDialog(getContext());
+        dialog.show();
+        dialog.title.setText("Exit Quiz");
+        dialog.body.setText("Are You Sure To Exit From Quiz ?");
+        dialog.exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_questionFragment_to_listFragment);
+                dialog.dismiss();
+            }
+        });
     }
 
     private void resetOptions() {
@@ -179,10 +201,17 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     private void submitResult() {
 
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("correct", correctAnswer);
-        result.put("wrong", wrongAnswer);
-        result.put("notAnswered", notAnswered);
+//        HashMap<String, Object> result = new HashMap<>();
+//        result.put("correct", correctAnswer);
+//        result.put("wrong", wrongAnswer);
+//        result.put("notAnswered", notAnswered);
+
+        QuestionFragmentDirections.ActionQuestionFragmentToResultFragment action =
+                QuestionFragmentDirections.actionQuestionFragmentToResultFragment();
+        action.setCorrectAnswer(correctAnswer);
+        action.setWrongAnswer(wrongAnswer);
+        action.setNotAnswered(notAnswered);
+        navController.navigate(action);
 
     }
 
